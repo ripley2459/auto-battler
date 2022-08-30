@@ -6,8 +6,10 @@ public class Life : MonoBehaviour
     #region Fields
 
     [SerializeField] private float _maxLife = 50f;
-    
+
     [SerializeField] private float _actualLife = 50f;
+
+    private TeamMember _teamMember;
 
     #endregion Fields
 
@@ -52,6 +54,8 @@ public class Life : MonoBehaviour
     private void Awake()
     {
         OnLifeChanged += Death;
+
+        _teamMember = GetComponent<TeamMember>();
     }
 
     private void Start()
@@ -75,8 +79,7 @@ public class Life : MonoBehaviour
     {
         if (!IsAlive())
         {
-            gameObject.SetActive(false);
-            // TODO: Notify managers this one is dead to update lists and check if batle is ended.
+            BattleManager.Instance.ApplyDeath(_teamMember);
         }
     }
 

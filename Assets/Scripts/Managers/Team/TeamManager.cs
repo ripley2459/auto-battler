@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamManager : MonoBehaviour
+public class TeamManager : MonoBehaviour, IInitializer
 {
     #region Fields
 
@@ -48,7 +48,33 @@ public class TeamManager : MonoBehaviour
 
     #region Methods
 
-    public void InitMembers()
+    public void Awake()
+    {
+        BattleManager.Instance.OnPreInit += PreInit;
+        BattleManager.Instance.OnInit += Init;
+        BattleManager.Instance.OnPostInit += PostInit;
+        
+        BattleManager.Instance.NotifyDeath += ApplyDeath;
+        BattleManager.Instance.OnEndbattle += OnEndBattle;
+    }
+
+    private void ApplyDeath(TeamMember member)
+    {
+        if (member.Team == _team)
+        {
+            _members.Remove(member);
+            if (_members.Count == 0)
+            {
+                BattleManager.Instance.ApplyLoose(this);
+            }
+        }
+        else
+        {
+            _enemies.Remove(member);
+        }
+    }
+
+    public void PreInit()
     {
         foreach (TeamMember prefab in _prefabs)
         {
@@ -60,24 +86,35 @@ public class TeamManager : MonoBehaviour
             newAgent.Team = _team;
             newAgent.Attack.TeamManager = this;
             newAgent.Attack.Team = _team;
-            
+
             _members.Add(newAgent);
         }
     }
 
-    public void InitEnemies()
+    public void Init()
     {
         _enemies = BattleManager.Instance.GetEnemies(Team);
     }
 
-    public void ResetMembers()
+    public void PostInit()
     {
-        throw new NotImplementedException();
+        // Empty
     }
-    
-    public bool RemoveEnemy(TeamMember enemy)
+
+    public void OnEndBattle()
     {
-        return _enemies.Remove(enemy);
+        foreach (TeamMember member in _members)
+        {
+            Destroy(member.gameObject);
+        }
+
+        foreach (TeamMember enemy in _enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+
+        _members.Clear();
+        _enemies.Clear();
     }
 
     public TeamMember GetNearestTarget(Transform member)
@@ -103,7 +140,7 @@ public class TeamManager : MonoBehaviour
 
         return bestTarget;
     }
-    
+
     #endregion Methods
 
     public enum TeamList

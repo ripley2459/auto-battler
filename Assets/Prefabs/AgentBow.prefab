@@ -575,6 +575,16 @@ PrefabInstance:
       propertyPath: _attackRange
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 7925005590023299452, guid: d4547345ba3e9074fb8dd0f60d0b62a1,
+        type: 3}
+      propertyPath: _attackRate
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7925005590023299452, guid: d4547345ba3e9074fb8dd0f60d0b62a1,
+        type: 3}
+      propertyPath: _damage
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4547345ba3e9074fb8dd0f60d0b62a1, type: 3}
 --- !u!4 &6854436894489275583 stripped

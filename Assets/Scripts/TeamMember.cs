@@ -11,7 +11,7 @@ public class TeamMember : MonoBehaviour
     private Agent _agent;
     private Attack _attack;
     private Life _life;
-    
+
     #endregion Fields
 
     #region Properties
@@ -33,7 +33,7 @@ public class TeamMember : MonoBehaviour
     public Attack Attack => _attack;
 
     public Life Life => _life;
-    
+
     #endregion Properties
 
     #region Methods
