@@ -1,0 +1,229 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using UnityEngine;
+
+public class AttackV1 : MonoBehaviour
+{
+    #region Fields
+
+    [SerializeField] private float _damage = 5f;
+    [SerializeField] private float _attackRate = 0.5f;
+    [SerializeField] private float _attackProgression;
+    [SerializeField] private float _attackRange;
+    private float _damageDealt;
+    private SphereCollider _range;
+    private Agent _agent;
+    private List<TeamMember> _potentialTargets = new List<TeamMember>();
+    private List<TeamMember> _actualTargets = new List<TeamMember>();
+    private Life _target;
+
+    #endregion Fields
+
+    #region Events
+
+    private event Action _onAttack;
+
+    public event Action OnAttack
+    {
+        add
+        {
+            _onAttack -= value;
+            _onAttack += value;
+        }
+        remove => _onAttack -= value;
+    }
+
+    private event Action _onDamageDealt;
+
+    public event Action OnDamageDealt
+    {
+        add
+        {
+            _onDamageDealt -= value;
+            _onDamageDealt += value;
+        }
+        remove => _onDamageDealt -= value;
+    }
+
+    private event Action _onChargingAttack;
+
+    public event Action OnChargingAttack
+    {
+        add
+        {
+            _onChargingAttack -= value;
+            _onChargingAttack += value;
+        }
+        remove => _onChargingAttack -= value;
+    }
+
+    #endregion Events
+
+    #region Properties
+
+    public float AttackProgression
+    {
+        get => _attackProgression;
+        set
+        {
+            _attackProgression = value;
+            _onChargingAttack?.Invoke();
+        }
+    }
+
+    public List<TeamMember> PotentialTargets
+    {
+        get => _potentialTargets;
+        set => _potentialTargets = value;
+    }
+
+    public float DamageDealt
+    {
+        get => _damageDealt;
+        set
+        {
+            _damageDealt = value;
+            _onDamageDealt?.Invoke();
+        }
+    }
+
+    #endregion Properties
+
+    #region Methods
+
+    private void Awake()
+    {
+        _range = GetComponent<SphereCollider>();
+        _agent = GetComponent<Agent>();
+    }
+
+    private void Start()
+    {
+        AttackProgression = 0f;
+        _attackRange = Mathf.Clamp(_attackRange, 0f, Mathf.Infinity);
+        _range.radius = _attackRange;
+    }
+
+    private void Update()
+    {
+        if (CanChargeAttack())
+        {
+            if (ChargeAttack() >= 1f)
+            {
+                ApplyAttack();
+            }
+        }
+        else
+        {
+            CancelAttack();
+
+            if (!HasTarget())
+            {
+                FoundNewTarget();
+                GoToTarget();
+            }
+        }
+    }
+
+    private bool CanChargeAttack()
+    {
+        return HasTarget() && InRangeOfTarget();
+    }
+
+    private void ApplyAttack()
+    {
+        AttackProgression = 0f;
+        DamageDealt += _target.Harm(_damage);
+    }
+
+    private void CancelAttack()
+    {
+        AttackProgression = 0f;
+    }
+
+    private float ChargeAttack()
+    {
+        return AttackProgression += Time.deltaTime * _attackRate;
+    }
+
+    #region TargetManagement
+
+    private void FoundNewTarget()
+    {
+        _target = GetNearestTarget(_potentialTargets);
+    }
+
+    private bool InRangeOfTarget()
+    {
+        throw new NotImplementedException();
+    }
+
+    private bool HasTarget()
+    {
+        if (_target != null)
+        {
+            return _target.IsAlive();
+        }
+
+        return false;
+    }
+
+    private void GoToTarget()
+    {
+        _agent.SetDestination(_target.transform.position);
+    }
+
+    #endregion TargetManagement
+
+    #region TargetSelectionMethods
+
+    public Life GetNearestTarget(List<TeamMember> targets)
+    {
+        TeamMember bestTarget = null;
+        float closestDist = Mathf.Infinity;
+        Vector3 currentPos = transform.position;
+
+        foreach (TeamMember pTarget in targets)
+        {
+            if (pTarget.Life.IsAlive())
+            {
+                Vector3 directionToTarget = pTarget.transform.position - currentPos;
+                float dSqrToTarget = directionToTarget.sqrMagnitude;
+
+                if (dSqrToTarget < closestDist)
+                {
+                    closestDist = dSqrToTarget;
+                    bestTarget = pTarget;
+                }
+            }
+        }
+
+        return bestTarget.Life;
+    }
+
+    #endregion TargetSelectionMethods
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Agent"))
+        {
+            TeamMember inRangeTarget = other.GetComponent<TeamMember>();
+
+            if (inRangeTarget.Life.IsAlive() && _potentialTargets.Contains(inRangeTarget))
+            {
+                _actualTargets.Add(inRangeTarget);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Agent"))
+        {
+            _actualTargets.Remove(other.GetComponent<TeamMember>());
+        }
+    }
+
+    #endregion Methods
+}
