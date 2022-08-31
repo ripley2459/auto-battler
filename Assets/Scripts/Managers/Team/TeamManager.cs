@@ -6,6 +6,9 @@ public class TeamManager : MonoBehaviour, IInitializer
 {
     #region Fields
 
+    [SerializeField] private string _teamName;
+    [SerializeField] private Color _teamColor;
+
     /// <summary>
     /// Choix de l'équipe.
     /// </summary>
@@ -35,6 +38,10 @@ public class TeamManager : MonoBehaviour, IInitializer
 
     #region Properties
 
+    public Color TeamColor => _teamColor;
+
+    public string TeamName => _teamName;
+
     public TeamList Team => _team;
 
     public List<TeamMember> Members
@@ -53,7 +60,7 @@ public class TeamManager : MonoBehaviour, IInitializer
         BattleManager.Instance.OnPreInit += PreInit;
         BattleManager.Instance.OnInit += Init;
         BattleManager.Instance.OnPostInit += PostInit;
-        
+
         BattleManager.Instance.NotifyDeath += ApplyDeath;
         BattleManager.Instance.OnEndbattle += OnEndBattle;
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,6 +30,7 @@ public class BattleManager : Singleton<BattleManager>
     private bool _inBattle = false;
 
     [SerializeField] private GameObject _menu;
+    [SerializeField] private TextMeshProUGUI _winnerTeam;
 
     #endregion Fields
 
@@ -100,6 +102,7 @@ public class BattleManager : Singleton<BattleManager>
 
     private void Start()
     {
+        _winnerTeam.text = "";
         _agent47 = Instantiate(_agent47, Vector3.up, Quaternion.identity, transform);
     }
 
@@ -184,10 +187,12 @@ public class BattleManager : Singleton<BattleManager>
     
     private void EndBattle()
     {
+        _menu.SetActive(true);
+        _winnerTeam.text = _actualTeams[0].TeamName + " win!";
+        
         _onEndBattle?.Invoke();
         _actualTeams.Clear();
         
-        _menu.SetActive(true);
         _inBattle = false;
     }
 

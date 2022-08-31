@@ -45,5 +45,15 @@ public class TeamMember : MonoBehaviour
         _life = GetComponent<Life>();
     }
 
+    private void Start()
+    {
+        foreach (var r in GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            Debug.Log(r.materials[0].color);
+            r.material.color = _teamManager.TeamColor;
+            Debug.Log(r.materials[0].color);
+        }
+    }
+
     #endregion Methods
 }
