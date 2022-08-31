@@ -28,7 +28,7 @@ public class BattleManager : Singleton<BattleManager>
 
     private bool _inBattle = false;
 
-    [SerializeField] private GameObject _startButton;
+    [SerializeField] private GameObject _menu;
 
     #endregion Fields
 
@@ -109,7 +109,7 @@ public class BattleManager : Singleton<BattleManager>
 
         _actualTeams = new List<TeamManager>(_teams);
         
-        _startButton.SetActive(false);
+        _menu.SetActive(false);
 
         _inBattle = true;
 
@@ -187,7 +187,7 @@ public class BattleManager : Singleton<BattleManager>
         _onEndBattle?.Invoke();
         _actualTeams.Clear();
         
-        _startButton.SetActive(true);
+        _menu.SetActive(true);
         _inBattle = false;
     }
 
