@@ -144,7 +144,12 @@ public class Attack : MonoBehaviour
             if (ChargeAttack() >= 1.0f)
             {
                 AttackProgression = 0f;
-                _target.Life.Harm(_damage);
+
+                float damage = _target.Life.Harm(_damage);
+                if (damage > 0)
+                {
+                    DamageDealt += damage;
+                }
             }
         }
     }
@@ -176,7 +181,6 @@ public class Attack : MonoBehaviour
 
     private bool TargetInRange()
     {
-        gameObject.name = Vector3.Distance(transform.position, _target.transform.position) + "/" + _attackRange;
         return Vector3.Distance(transform.position, _target.transform.position) <= _attackRange;
     }
 

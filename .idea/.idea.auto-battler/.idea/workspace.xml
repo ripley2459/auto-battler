@@ -11,8 +11,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/05f2ac9c8847426992765a22ef6d94ca115400/0d/49eabe1d/RectTransform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5406a456cf734443b3d02a7d123287f1299290/71/050f28ea/Action`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../$$$/WS3SAVE/Assets/Scripts/Score/ScoreDisplayer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Bars.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -73,7 +75,8 @@
       <updated>1661874534692</updated>
       <workItem from="1661874545496" duration="4235000" />
       <workItem from="1661963792511" duration="1151000" />
-      <workItem from="1661967450252" duration="1210000" />
+      <workItem from="1661967450252" duration="1807000" />
+      <workItem from="1661991145349" duration="5844000" />
     </task>
     <servers />
   </component>

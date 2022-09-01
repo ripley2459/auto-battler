@@ -102,6 +102,7 @@ public class BattleManager : Singleton<BattleManager>
 
     private void Start()
     {
+        _menu.SetActive(true);
         _winnerTeam.text = "";
         _agent47 = Instantiate(_agent47, Vector3.up, Quaternion.identity, transform);
     }
