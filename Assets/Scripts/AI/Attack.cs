@@ -28,6 +28,9 @@ public class Attack : MonoBehaviour
 
     private LineRenderer _line;
 
+    private BasicAnimationsController _animationsController;
+    private bool _hasAnimator;
+    
     #endregion Fields
 
     #region Events
@@ -112,6 +115,9 @@ public class Attack : MonoBehaviour
     {
         _agent = GetComponent<Agent>();
         _line = GetComponent<LineRenderer>();
+
+        _animationsController = GetComponentInChildren<BasicAnimationsController>();
+        if (_animationsController != null) _hasAnimator = true;
     }
 
     private void Start()
@@ -137,14 +143,16 @@ public class Attack : MonoBehaviour
             _line.SetPosition(1, Vector3.zero);
         }
 
+        if (_hasAnimator) _animationsController.SetRun();
         if (TargetInRange())
         {
+            if (_hasAnimator) _animationsController.StopRun();
             _agent.StopMoving();
 
             if (ChargeAttack() >= 1.0f)
             {
+                if (_hasAnimator) _animationsController.Attack();
                 AttackProgression = 0f;
-
                 float damage = _target.Life.Harm(_damage);
                 if (damage > 0)
                 {
