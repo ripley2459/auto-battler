@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 618373869}
   - component: {fileID: 618373871}
   - component: {fileID: 618373870}
-  - component: {fileID: 618373872}
   m_Layer: 8
   m_Name: AttackRate
   m_TagString: Untagged
@@ -74,18 +73,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &618373872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618373868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e161987f3ffd974459316f5d96df2a7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1159970951
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +84,6 @@ GameObject:
   - component: {fileID: 1159970952}
   - component: {fileID: 1159970954}
   - component: {fileID: 1159970953}
-  - component: {fileID: 1159970955}
   m_Layer: 8
   m_Name: Life
   m_TagString: Untagged
@@ -160,18 +146,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1159970955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159970951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4717810625c4cc9409ff87e556d0a994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1268685586
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,8 @@ public class Life : MonoBehaviour
 
     private TeamMember _teamMember;
 
+    private Armor _armor;
+
     #endregion Fields
 
     #region Properties
@@ -56,6 +58,7 @@ public class Life : MonoBehaviour
         OnLifeChanged += Death;
 
         _teamMember = GetComponent<TeamMember>();
+        _armor = GetComponent<Armor>();
     }
 
     private void Start()
@@ -65,6 +68,7 @@ public class Life : MonoBehaviour
 
     public float Harm(float damage)
     {
+        if (!ReferenceEquals(_armor, null)) damage = _armor.reduceDamage(damage);
         ActualLife -= damage;
         // Possibilité d'ajouter de l'armure et de renvoyer les dégâts réellement infligés.
         return damage;

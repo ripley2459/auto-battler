@@ -8,29 +8,28 @@ public class Attack : MonoBehaviour
 
     private TeamManager _teamManager;
 
-    private Agent _agent;
+    protected Agent _agent;
 
-    [SerializeField] private float _damage = 5f;
+    [SerializeField] protected float _damage = 5f;
 
-    [SerializeField] private float _attackRate = 0.5f;
+    [SerializeField] protected float _attackRate = 0.5f;
 
-    [SerializeField] private float _attackProgression;
+    [SerializeField] protected float _attackProgression;
 
-    [SerializeField] private float _attackRange = 1.0f;
+    [SerializeField] protected float _attackRange = 1.0f;
 
-    [SerializeField] private bool _debugLink = false;
+    [SerializeField] protected bool _debugLink = false;
 
     private float _damageDealt;
 
-    private TeamMember _target;
+    protected TeamMember _target;
 
     private TeamManager.TeamList _team = TeamManager.TeamList.No;
 
     private LineRenderer _line;
 
-    private BasicAnimationsController _animationsController;
-    private bool _hasAnimator;
-    
+    protected BasicAnimationsController _animationsController;
+
     #endregion Fields
 
     #region Events
@@ -117,7 +116,6 @@ public class Attack : MonoBehaviour
         _line = GetComponent<LineRenderer>();
 
         _animationsController = GetComponentInChildren<BasicAnimationsController>();
-        if (_animationsController != null) _hasAnimator = true;
     }
 
     private void Start()
@@ -127,7 +125,7 @@ public class Attack : MonoBehaviour
         _agent.AgentI.stoppingDistance = _attackRange;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         GetNewTarget();
         RotateToTarget();
@@ -143,22 +141,27 @@ public class Attack : MonoBehaviour
             _line.SetPosition(1, Vector3.zero);
         }
 
-        if (_hasAnimator) _animationsController.SetRun();
+        if (!ReferenceEquals(_animationsController, null)) _animationsController.SetRun();
         if (TargetInRange())
         {
-            if (_hasAnimator) _animationsController.StopRun();
+            if(!ReferenceEquals(_animationsController, null)) _animationsController.StopRun();
             _agent.StopMoving();
 
             if (ChargeAttack() >= 1.0f)
             {
-                if (_hasAnimator) _animationsController.Attack();
-                AttackProgression = 0f;
-                float damage = _target.Life.Harm(_damage);
-                if (damage > 0)
-                {
-                    DamageDealt += damage;
-                }
+                ApplyAttack();
             }
+        }
+    }
+
+    protected virtual void ApplyAttack()
+    {
+        if (!ReferenceEquals(_animationsController, null)) _animationsController.Attack();
+        AttackProgression = 0f;
+        float damage = _target.Life.Harm(_damage);
+        if (damage > 0)
+        {
+            DamageDealt += damage;
         }
     }
 
@@ -187,7 +190,7 @@ public class Attack : MonoBehaviour
 
     #endregion TargetSelectionMethods
 
-    private bool TargetInRange()
+    protected bool TargetInRange()
     {
         return Vector3.Distance(transform.position, _target.transform.position) <= _attackRange;
     }

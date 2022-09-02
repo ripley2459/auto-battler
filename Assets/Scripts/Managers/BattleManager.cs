@@ -98,6 +98,12 @@ public class BattleManager : Singleton<BattleManager>
     
     #endregion Events
 
+    #region Properties
+
+    public Agent Agent47 => _agent47;
+
+    #endregion Properties
+    
     #region Methods
 
     private void Start()
