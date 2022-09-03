@@ -70,7 +70,6 @@ public class Life : MonoBehaviour
     {
         if (!ReferenceEquals(_armor, null)) damage = _armor.reduceDamage(damage);
         ActualLife -= damage;
-        // Possibilité d'ajouter de l'armure et de renvoyer les dégâts réellement infligés.
         return damage;
     }
 

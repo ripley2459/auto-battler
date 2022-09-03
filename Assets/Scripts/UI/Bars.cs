@@ -9,14 +9,14 @@ public class Bars : MonoBehaviour
 
     [SerializeField] private GameObject _lifeBar;
     [SerializeField] private GameObject _attackRateBar;
-    private TeamMember _teamMember;
+    protected TeamMember _teamMember;
     private Image _lifeImage;
 
     #endregion Fields
 
     #region Methods
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _teamMember = GetComponentInParent<TeamMember>();
         _teamMember.Life.OnLifeChanged += UpdateLifeBar;

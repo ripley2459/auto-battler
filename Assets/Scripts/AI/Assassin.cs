@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,38 @@ public class Assassin : Attack
 
     #endregion Fields
 
+    #region Properties
+
+    public float DashCooldown => _dashCooldown;
+
+    public float ActualDashCooldown
+    {
+        get => _actualDashCooldown;
+        set
+        {
+            _actualDashCooldown = value;
+            _onChargingDash?.Invoke();
+        }
+    }
+
+    #endregion Properties
+
+    #region Events
+
+    private event Action _onChargingDash;
+
+    public event Action OnChargingDash
+    {
+        add
+        {
+            _onChargingDash -= value;
+            _onChargingDash += value;
+        }
+        remove => _onChargingDash -= value;
+    }
+
+    #endregion Events
+
     #region Methods
 
     protected override void Update()
@@ -29,20 +62,15 @@ public class Assassin : Attack
 
     private float ChargeDash()
     {
-        return _actualDashCooldown += Time.deltaTime;
+        return ActualDashCooldown += Time.deltaTime;
     }
 
     private Vector3 GetDashDestination()
     {
         _dashIterations++;
-        Vector2 fromTarget = (transform.position - _target.transform.position).normalized;
-        Vector2 perpendicular = new Vector2(-fromTarget.y, fromTarget.x);
 
-        float angle = Random.Range(0, Mathf.PI);
-
-        Vector2 offset = fromTarget * Mathf.Sin(angle) + perpendicular * Mathf.Cos(angle);
-
-        Vector3 finalPosition = _target.transform.position + (Vector3)(offset * _dashRange);
+        Vector3 offset = _target.transform.position - transform.position;
+        Vector3 finalPosition = _target.transform.position + offset;
 
         if (_dashIterations < 10)
         {
@@ -63,6 +91,7 @@ public class Assassin : Attack
         else
         {
             // pas de destination pour l'instant donc attendre.
+            // TODO: WAIT BEFORE RETRYING
         }
     }
 

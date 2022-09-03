@@ -7,7 +7,7 @@ public class BasicAnimationsController : MonoBehaviour
 {
     #region Fields
 
-    private Animator _animator;
+    protected Animator _animator;
 
     #endregion Fields
 
