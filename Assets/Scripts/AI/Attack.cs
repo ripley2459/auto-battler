@@ -22,6 +22,7 @@ public class Attack : MonoBehaviour
 
     private float _damageDealt;
 
+    protected TeamMember _previousTarget;
     protected TeamMember _target;
 
     private TeamManager.TeamList _team = TeamManager.TeamList.No;
@@ -170,8 +171,15 @@ public class Attack : MonoBehaviour
     /// </summary>
     private void GetNewTarget()
     {
-        _target = _teamManager.GetNearestTarget(transform);
-        _agent.SetDestination(_target.transform.position);
+        TeamMember newTarget = _teamManager.GetNearestTarget(transform);
+
+        if (!ReferenceEquals(newTarget, _target))
+        {
+            _previousTarget = _target;
+            _target = newTarget;
+        }
+        
+        _agent.SetDestination(_target.transform.position);   
     }
 
     private float ChargeAttack()

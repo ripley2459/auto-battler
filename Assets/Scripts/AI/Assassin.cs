@@ -13,7 +13,8 @@ public class Assassin : Attack
     private float _actualDashCooldown = 10f;
     [SerializeField] private float _damageMultiplier = 1.25f;
     private int _dashIterations = 0;
-
+    private TeamMember _dashedTarget;
+    
     #endregion Fields
 
     #region Properties
@@ -54,7 +55,7 @@ public class Assassin : Attack
     {
         base.Update();
 
-        if (TargetInRange() && ChargeDash() >= _dashCooldown)
+        if (TargetInRange() && ChargeDash() >= _dashCooldown && !ReferenceEquals(_target, _dashedTarget))
         {
             Dash(GetDashDestination());
         }
@@ -67,6 +68,7 @@ public class Assassin : Attack
 
     private Vector3 GetDashDestination()
     {
+        // return Vector3.zero;
         _dashIterations++;
 
         Vector3 offset = _target.transform.position - transform.position;
@@ -87,6 +89,7 @@ public class Assassin : Attack
         {
             _actualDashCooldown = 0f;
             _agent.AgentI.Warp(destination);
+            _dashedTarget = _target;
         }
         else
         {
