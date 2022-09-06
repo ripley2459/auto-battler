@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Oriente constament le widget face à la caméra.
+/// </summary>
 public class Orientation : MonoBehaviour
 {
     #region Fields
@@ -19,7 +22,8 @@ public class Orientation : MonoBehaviour
 
     private void Update()
     {
-        transform.LookAt(transform.position + _camera.transform.rotation * Vector3.forward, _camera.transform.rotation * Vector3.up);
+        transform.LookAt(transform.position + _camera.transform.rotation * Vector3.forward,
+            _camera.transform.rotation * Vector3.up);
     }
 
     #endregion Methods

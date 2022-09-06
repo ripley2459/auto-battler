@@ -8,6 +8,10 @@ public class BattleManager : Singleton<BattleManager>
 {
     #region Fields
 
+    /// <summary>
+    /// L'agent 47 est un agent spéciale qui permet d'effectuer des opérations normalement utilisable par/pour les agents sans à avoir à les bouger ou instantier.
+    /// Il permet par exemple de vérifier la validité d'une position ou d'un chemin.
+    /// </summary>
     [SerializeField] private Agent _agent47;
 
     /// <summary>
@@ -18,18 +22,23 @@ public class BattleManager : Singleton<BattleManager>
     /// <summary>
     /// Liste des équipes n'ayant pas encore perdues.
     /// </summary>
-    [SerializeField]private List<TeamManager> _actualTeams = new List<TeamManager>();
-    
+    [SerializeField] private List<TeamManager> _actualTeams = new List<TeamManager>();
+
     /// <summary>
-    /// Distance minimale entre deux agent. Permet d'éviter des problèmes liés à la physique.
+    /// Distance minimale entre deux personnages. Permet d'éviter des problèmes liés à la physique.
+    /// Obsolète depuis que la physique n'est plus sur le projet. Gardé pour "éparpiller" les personnages.
     /// </summary>
     [SerializeField] private float _minimalDistance = 1.0f;
 
+    /// <summary>
+    /// Liste des positions actuellement occupées par un combattant.
+    /// </summary>
     private List<Vector3> _usedPositions = new List<Vector3>();
 
     private bool _inBattle = false;
-
+    
     [SerializeField] private GameObject _menu;
+    
     [SerializeField] private TextMeshProUGUI _winnerTeam;
 
     #endregion Fields
@@ -95,7 +104,7 @@ public class BattleManager : Singleton<BattleManager>
         }
         remove => _onEndBattle -= value;
     }
-    
+
     #endregion Events
 
     #region Properties
@@ -103,7 +112,7 @@ public class BattleManager : Singleton<BattleManager>
     public Agent Agent47 => _agent47;
 
     #endregion Properties
-    
+
     #region Methods
 
     private void Start()
@@ -118,7 +127,7 @@ public class BattleManager : Singleton<BattleManager>
         if (_inBattle) return;
 
         _actualTeams = new List<TeamManager>(_teams);
-        
+
         _menu.SetActive(false);
 
         _inBattle = true;
@@ -128,6 +137,11 @@ public class BattleManager : Singleton<BattleManager>
         _onPostInit?.Invoke();
     }
 
+    /// <summary>
+    /// Renvoie une position aléatoire accécible par un agent dans les limites de la zone donnée.
+    /// </summary>
+    /// <param name="bounds">La zone donnée</param>
+    /// <returns>Position</returns>
     public Vector3 GetRandomPositionInBounds(Bounds bounds)
     {
         float rad = _agent47.Radius;
@@ -156,6 +170,12 @@ public class BattleManager : Singleton<BattleManager>
         return GetRandomPositionInBounds(bounds);
     }
 
+    /// <summary>
+    /// Donne la liste des ennemis d'une équipe.
+    /// </summary>
+    /// <param name="ally">L'équipe donnée</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public List<TeamMember> GetEnemies(TeamManager.TeamList ally)
     {
         if (ally == TeamManager.TeamList.No)
@@ -176,12 +196,20 @@ public class BattleManager : Singleton<BattleManager>
         return enemies;
     }
 
+    /// <summary>
+    /// Indique aux équipes d'un combattant est mort. Permet d'actualiser les listes d'ennemis.
+    /// </summary>
+    /// <param name="member">Le combattant mort</param>
     public void ApplyDeath(TeamMember member)
     {
         _notifyDeath?.Invoke(member);
         Destroy(member.gameObject);
     }
 
+    /// <summary>
+    /// Une équipe n'a plus aucun combattant, actualiser la liste des participant et vérifier si la bataille est terminée.
+    /// </summary>
+    /// <param name="team"></param>
     public void ApplyLoose(TeamManager team)
     {
         _actualTeams.Remove(team);
@@ -191,15 +219,15 @@ public class BattleManager : Singleton<BattleManager>
             EndBattle();
         }
     }
-    
+
     private void EndBattle()
     {
         _menu.SetActive(true);
         _winnerTeam.text = _actualTeams[0].TeamName + " win!";
-        
+
         _onEndBattle?.Invoke();
         _actualTeams.Clear();
-        
+
         _inBattle = false;
     }
 

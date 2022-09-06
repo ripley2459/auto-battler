@@ -1,20 +1,32 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// L'assassin est un agent spéciale qui peut se téléporter derrière sa cible.
+/// Il ne peut se téléporter deux fois de suite sur la même cible.
+/// Les dégâts sont augmentés si l'assassin est dérrière sa cible.
+/// </summary>
 public class Assassin : Attack
 {
     #region Fields
 
     [SerializeField] private float _dashRange = 3f;
-    [SerializeField] private float _dashArc = 3f;
+
     [SerializeField] private float _dashCooldown = 10f;
+
     private float _actualDashCooldown = 10f;
+
     [SerializeField] private float _damageMultiplier = 1.25f;
+
+    /// <summary>
+    /// Permet d'éviter un stack overflow si aucune destination n'est disponible.
+    /// </summary>
     private int _dashIterations = 0;
+
     private TeamMember _dashedTarget;
-    
+
+    private NinjaAnimationsController _ninjaAnimationsController;
+
     #endregion Fields
 
     #region Properties
@@ -51,11 +63,19 @@ public class Assassin : Attack
 
     #region Methods
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _ninjaAnimationsController = (NinjaAnimationsController)_animationsController;
+    }
+
     protected override void Update()
     {
         base.Update();
 
-        if (TargetInRange() && ChargeDash() >= _dashCooldown && !ReferenceEquals(_target, _dashedTarget))
+        if (TargetInRange() && ChargeDash() >= _dashCooldown && !ReferenceEquals(_target, _dashedTarget) &&
+            !ReferenceEquals(_target, null))
         {
             Dash(GetDashDestination());
         }
@@ -76,7 +96,6 @@ public class Assassin : Attack
 
         if (_dashIterations < 10)
         {
-            _dashIterations = 0;
             return BattleManager.Instance.Agent47.CanReach(finalPosition) ? finalPosition : GetDashDestination();
         }
 
@@ -87,22 +106,29 @@ public class Assassin : Attack
     {
         if (destination != Vector3.zero)
         {
+            //  if (!ReferenceEquals(_animationsController, null)) _ninjaAnimationsController.Dash();
             _actualDashCooldown = 0f;
             _agent.AgentI.Warp(destination);
-            _dashedTarget = _target;
+            _dashIterations = 0;
         }
-        else
-        {
-            // pas de destination pour l'instant donc attendre.
-            // TODO: WAIT BEFORE RETRYING
-        }
+        
+        _dashedTarget = _target;
     }
 
     protected override void ApplyAttack()
     {
         if (!ReferenceEquals(_animationsController, null)) _animationsController.Attack();
         AttackProgression = 0f;
-        float damage = _target.Life.Harm(_damage);
+
+        float mult = 1.0f;
+        float dot = Vector3.Dot(transform.forward, _target.transform.forward);
+
+        if (dot < 0f)
+        {
+            mult = _damageMultiplier;
+        }
+
+        float damage = _target.Life.Harm(_damage * mult);
         if (damage > 0)
         {
             DamageDealt += damage;

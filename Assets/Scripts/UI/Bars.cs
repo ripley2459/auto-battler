@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Bars : MonoBehaviour
@@ -8,8 +6,11 @@ public class Bars : MonoBehaviour
     #region Fields
 
     [SerializeField] private GameObject _lifeBar;
+
     [SerializeField] private GameObject _attackRateBar;
+
     protected TeamMember _teamMember;
+
     private Image _lifeImage;
 
     #endregion Fields
@@ -32,7 +33,7 @@ public class Bars : MonoBehaviour
 
         var sX = Mathf.Clamp(actualLife / maxLife, 0f, 1f);
         _lifeBar.transform.localScale = new Vector3(sX, 1f, 1f);
-        
+
         _lifeImage.color = Color.Lerp(Color.red, Color.green, actualLife / maxLife);
     }
 

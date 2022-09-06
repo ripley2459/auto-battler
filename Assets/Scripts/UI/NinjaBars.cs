@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NinjaBars : Bars
 {
     #region Fields
+
     [SerializeField] private GameObject _dashBar;
+
     private Assassin _assassin;
+
     #endregion Fields
-    
+
     #region Methods
 
     protected override void Awake()

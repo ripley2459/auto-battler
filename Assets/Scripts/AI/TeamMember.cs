@@ -1,20 +1,30 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Donne un équipe à l'agent, permet également d'avoir accès rapidement à ses composants.
+/// </summary>
 public class TeamMember : MonoBehaviour
 {
     #region Fields
 
     [SerializeField] private TeamManager.TeamList _team = TeamManager.TeamList.No;
+    
     private TeamManager _teamManager;
+    
     private Agent _agent;
+    
     private Attack _attack;
+    
     private Life _life;
+    
     private String _name;
 
-    // https://www.fantasynamegenerators.com/pirate-names.php
+    /// <summary>
+    /// Donne un nom aléatoire au combattant.
+    /// https://www.fantasynamegenerators.com/pirate-names.php
+    /// </summary>
     public static String[] RandomNames = new[]
     {
         "Stanwick 'The Cook' Norman",

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class TeamManager : MonoBehaviour, IInitializer
     #region Fields
 
     [SerializeField] private string _teamName;
+    
     [SerializeField] private Color _teamColor;
 
     /// <summary>
@@ -124,6 +124,11 @@ public class TeamManager : MonoBehaviour, IInitializer
         _enemies.Clear();
     }
 
+    /// <summary>
+    /// Renvoie le combattant ennemis à cette équipe le plus proche d'une position donnée.
+    /// </summary>
+    /// <param name="member">Position donnée.</param>
+    /// <returns>TeamMember du combattant ennemis le plus proche de la position donnée.</returns>
     public TeamMember GetNearestTarget(Transform member)
     {
         TeamMember bestTarget = null;

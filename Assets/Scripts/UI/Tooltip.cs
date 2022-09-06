@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Affiche un petit encart en bas à gauche incluant des infos sur le personnage survolé avec la souris.
+/// </summary>
 public class Tooltip : MonoBehaviour
 {
     #region Fields
 
     [SerializeField] private GameObject _toolTip;
+    
     [SerializeField] private TextMeshProUGUI _life;
+    
     [SerializeField] private TextMeshProUGUI _damageDealt;
+    
     [SerializeField] private TextMeshProUGUI _name;
+    
     private TeamMember _teamMember;
 
     #endregion Fields

@@ -66,6 +66,11 @@ public class Life : MonoBehaviour
         ActualLife = MaxLife;
     }
 
+    /// <summary>
+    /// Blesse ce combattant/
+    /// </summary>
+    /// <param name="damage">Quantité de dégâts à appliquer.</param>
+    /// <returns>La quantité de dégâts réellement appliqués.</returns>
     public float Harm(float damage)
     {
         if (!ReferenceEquals(_armor, null)) damage = _armor.reduceDamage(damage);

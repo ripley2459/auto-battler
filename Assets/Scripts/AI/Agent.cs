@@ -1,11 +1,18 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Script de base des agent/combattants.
+/// </summary>
 public class Agent : MonoBehaviour
 {
     #region Fields
 
     private NavMeshAgent _agent;
+    
+    /// <summary>
+    /// Destination de l'agent
+    /// </summary>
     private Vector3 _target = Vector3.zero;
 
     #endregion
@@ -35,29 +42,37 @@ public class Agent : MonoBehaviour
         _agent.autoRepath = true;
     }
 
+    /// <summary>
+    /// Actualise la destination de l'agent.
+    /// </summary>
     public void SetDestination()
     {
         _agent.SetDestination(Target);
     }
 
+    /// <summary>
+    /// Change et actualise la destination de l'agent.
+    /// </summary>
+    /// <param name="newTarget">Nouvelle destination</param>
     public void SetDestination(Vector3 newTarget)
     {
         Target = newTarget;
         _agent.SetDestination(Target);
     }
     /// <summary>
-    /// Check if the agent can reach his target.
+    /// Vérifie si l'agent peut atteindre sa destination actuelle.
     /// </summary>
-    /// <returns>boolean if or not the agent can reach his target.</returns>
+    /// <returns>Vrai si la destination est accéssible.</returns>
     public bool CanReach()
     {
         return CanReach(Target);
     }
 
     /// <summary>
-    /// Check if the agent can reach his destination;
+    /// Vérifie si l'agent peut atteindre une destination donnée.
     /// </summary>
-    /// <returns>boolean if or not the agent can reach his destination.</returns>
+    /// <param name="destination">Destination à vérifier</param>
+    /// <returns>Vrai si la destination est accéssible.</returns>
     public bool CanReach(Vector3 destination)
     {
         NavMeshPath path = new NavMeshPath();
@@ -75,6 +90,9 @@ public class Agent : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Immobilise l'agent.
+    /// </summary>
     public void StopMoving()
     {
         _agent.SetDestination(transform.position);

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Script qui permet de réduire les dégâts subit.
+/// </summary>
 public class Armor : MonoBehaviour
 {
     #region Fields

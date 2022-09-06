@@ -1,7 +1,9 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script qui permet à un combattant d'attaquer l'ennemis le plus proche.
+/// </summary>
 public class Attack : MonoBehaviour
 {
     #region Fields
@@ -18,16 +20,20 @@ public class Attack : MonoBehaviour
 
     [SerializeField] protected float _attackRange = 1.0f;
 
+    /// <summary>
+    /// Trace un trait entre cet agent et sa cible.
+    /// </summary>
     [SerializeField] protected bool _debugLink = false;
 
+    private LineRenderer _line;
+    
     private float _damageDealt;
 
     protected TeamMember _previousTarget;
+    
     protected TeamMember _target;
 
     private TeamManager.TeamList _team = TeamManager.TeamList.No;
-
-    private LineRenderer _line;
 
     protected BasicAnimationsController _animationsController;
 
@@ -111,7 +117,7 @@ public class Attack : MonoBehaviour
 
     #region Methods
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _agent = GetComponent<Agent>();
         _line = GetComponent<LineRenderer>();
@@ -130,7 +136,7 @@ public class Attack : MonoBehaviour
     {
         GetNewTarget();
         RotateToTarget();
-
+        
         if (_debugLink)
         {
             _line.SetPosition(0, transform.position);
@@ -143,6 +149,7 @@ public class Attack : MonoBehaviour
         }
 
         if (!ReferenceEquals(_animationsController, null)) _animationsController.SetRun();
+        
         if (TargetInRange())
         {
             if(!ReferenceEquals(_animationsController, null)) _animationsController.StopRun();
@@ -187,6 +194,9 @@ public class Attack : MonoBehaviour
         return AttackProgression += Time.deltaTime * _attackRate;
     }
 
+    /// <summary>
+    /// Tourne cet agent face à sa cible.
+    /// </summary>
     private void RotateToTarget()
     {
         Quaternion lookRotation = Quaternion.LookRotation(_target.transform.position - transform.position);
